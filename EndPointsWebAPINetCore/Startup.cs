@@ -66,20 +66,18 @@ namespace EndPointsWebAPINetCore
         {
             if (env.IsDevelopment())
             {
-              //  app.UseStaticFiles();
             //  app.UseExceptionHandler("/error-local-development");
                 app.UseDeveloperExceptionPage();
                 app.UseSwagger();
                 app.UseSwaggerUI(c =>
                 {
                     c.SwaggerEndpoint("/swagger/v1/swagger.json", "EndPointsWebAPINetCore v1");
-                   // c.InjectStylesheet("/swagger-ui/custom.css");
                 });
             }
-            //else
-            //{
-            //    app.UseExceptionHandler("/error");
-            //}
+            else
+            {
+                app.UseExceptionHandler("/error");
+            }
 
             app.UseHttpsRedirection();
 

@@ -6,8 +6,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-// For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-
 namespace EndPointsWebAPINetCore.Controllers
 {
     [Produces("application/json")]
@@ -22,20 +20,21 @@ namespace EndPointsWebAPINetCore.Controllers
             _passengerEndPoint = passengerEndPoint;
         }
         /// <summary>
-        ///  EndPoint takes the number of passengers as a parameter, calculate the total price and return the results sorted by total price
+        ///  Takes the number of passengers as a parameter, calculate the total price and return the results sorted by total price
         /// </summary>
         /// /// <remarks>
-        /// Sample request:
+        /// Sample response:
         ///     
         ///     {
         ///     "from": "Sydney Airport (SYD), T1 International Terminal",
-        ///     "to": "46 Church Street, Parramatta NSW, Australia",
-        ///        "result": [{
-        ///        "name": "Listing 4",
-        ///       "total": 286.95
-        ///        "isComplete": true
+        ///     "to":   "46 Church Street, Parramatta NSW, Australia",
+        ///     
+        ///        "result": [
+        ///                   {
+        ///                    "name": "Listing 4",
+        ///                    "total": 286.95
         ///                   }
-        ///                 ]
+        ///                  ]
         ///      }
         /// </remarks>
         /// <param name="passNo"></param>
@@ -56,7 +55,7 @@ namespace EndPointsWebAPINetCore.Controllers
                         .OrderByDescending(o => o.Total).ToList();
 
 
-                var Result = new { from = pList.from, to = pList.to, result = Tlist };
+                var Result = new { pList.from, pList.to, result = Tlist };
 
                 return Ok(Result);
             }
