@@ -5,6 +5,6 @@ namespace ClientWebAPI.Contracts
 {
     public interface IPassengerEndPoint
     {
-        Task<Passengers> GetPassengerList(int passNo);
+        Task<Passengers> GetPassengerList();
     }
 }

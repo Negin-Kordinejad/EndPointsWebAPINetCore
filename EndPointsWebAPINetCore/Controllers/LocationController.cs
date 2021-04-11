@@ -48,6 +48,7 @@ namespace EndPointsWebAPINetCore.Controllers
             catch (ArgumentException)
             {
                 return BadRequest($"Ip Address {ipAddress} is incorrect");
+               // throw new HttpResponsexeption()
             }
         }
     }

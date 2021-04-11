@@ -39,12 +39,19 @@ namespace EndPointsWebAPINetCore.Controllers
         /// <param name="passNo"></param>
         /// <returns>Json</returns>
         /// <response code="200">Success with the result</response>
+        /// <response code="400">If the passNo is zero</response> 
         /// <response code="404">If the result is not found</response>     
 
         [HttpGet("{passNo}")]
         public async Task<IActionResult> GetReport(int passNo)
         {
-            var pList = await _passengerEndPoint.GetPassengerList(passNo);
+            if (passNo == 0)
+            {
+                return BadRequest("Please enter the corrext number");
+            }
+
+            var pList = await _passengerEndPoint.GetPassengerList();
+
             var List = pList.listings.GroupBy(l => l.vehicleType.maxPassengers).Where(g => g.Key == passNo).FirstOrDefault();
 
             if (List != null)
@@ -61,6 +68,7 @@ namespace EndPointsWebAPINetCore.Controllers
             else
             {
                 return NotFound();
+                // _logger.LogWarning
             }
 
         }

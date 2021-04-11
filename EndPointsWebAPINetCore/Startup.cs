@@ -45,7 +45,7 @@ namespace EndPointsWebAPINetCore
                     License = new OpenApiLicense
                     {
                         Name = "Jayride",
-                        Url = new Uri("https://www.linkedin.com/company/jayride/"),
+                        Url = new Uri("https://www.jayride.com/"),
                     }
                 });
 

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace ClientWebAPI.Services
 {
-    public class PassengerEndPoint: IPassengerEndPoint
+    public class PassengerEndPoint : IPassengerEndPoint
     {
         private IAPIHelper _apiHelper;
 
@@ -15,18 +15,11 @@ namespace ClientWebAPI.Services
             _apiHelper = apiHelper;
 
         }
-        public async Task<Passengers> GetPassengerList(int passNo)
+        public async Task<Passengers> GetPassengerList()
         {
             string url = "";
 
-            if (passNo > 0)
-            {
-                url = $"https://jayridechallengeapi.azurewebsites.net/api/QuoteRequest"; 
-            }
-            else
-            {
-                throw new Exception("Please enter the corrext number");
-            }
+            url = $"https://jayridechallengeapi.azurewebsites.net/api/QuoteRequest";
 
             using (HttpResponseMessage response = await _apiHelper.AppClient.GetAsync(url))
             {
@@ -42,6 +35,6 @@ namespace ClientWebAPI.Services
                 }
             }
         }
-    
-}
+
+    }
 }
