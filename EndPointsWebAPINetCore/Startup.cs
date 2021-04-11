@@ -1,21 +1,14 @@
-using ClientWebAPI;
 using ClientWebAPI.Contracts;
 using ClientWebAPI.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
 using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Reflection;
-using System.Threading.Tasks;
 
 namespace EndPointsWebAPINetCore
 {
@@ -28,10 +21,10 @@ namespace EndPointsWebAPINetCore
 
         public IConfiguration Configuration { get; }
 
-        // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddScoped<IIpProcessor, IpProcessor>().AddScoped<IPassengerEndPoint, PassengerEndPoint>()
+            services.AddScoped<IIpProcessor, IpProcessor>()
+                    .AddScoped<IPassengerEndPoint, PassengerEndPoint>()
                     .AddSingleton<IAPIHelper, APIHelper>();
 
             services.AddControllers();
@@ -55,13 +48,13 @@ namespace EndPointsWebAPINetCore
                         Url = new Uri("https://www.linkedin.com/company/jayride/"),
                     }
                 });
+
                 var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
                 var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
                 c.IncludeXmlComments(xmlPath);
             });
         }
 
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             if (env.IsDevelopment())

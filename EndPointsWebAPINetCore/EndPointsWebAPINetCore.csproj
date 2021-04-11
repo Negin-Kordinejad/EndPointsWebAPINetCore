@@ -18,5 +18,9 @@
     <ProjectReference Include="..\ClientWebAPI\ClientWebAPI.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Model\" />
+  </ItemGroup>
+
 
 </Project>

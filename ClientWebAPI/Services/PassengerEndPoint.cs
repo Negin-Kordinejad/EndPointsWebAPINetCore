@@ -1,9 +1,7 @@
 ﻿using ClientWebAPI.Contracts;
 using ClientWebAPI.Model;
 using System;
-using System.Collections.Generic;
 using System.Net.Http;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace ClientWebAPI.Services

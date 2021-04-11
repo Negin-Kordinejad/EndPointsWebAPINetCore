@@ -1,10 +1,11 @@
-﻿using System;
+﻿using ClientWebAPI.Contracts;
+using System;
 using System.Collections.Generic;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
 
-namespace ClientWebAPI
+namespace ClientWebAPI.Services
 {
     public class APIHelper:IAPIHelper
     {

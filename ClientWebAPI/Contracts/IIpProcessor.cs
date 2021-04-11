@@ -1,9 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using ClientWebAPI.Model;
 using System.Threading.Tasks;
 
-namespace ClientWebAPI
+namespace ClientWebAPI.Contracts
 {
     public interface IIpProcessor
     {

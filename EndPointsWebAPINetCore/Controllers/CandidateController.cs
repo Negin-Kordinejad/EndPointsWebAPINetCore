@@ -1,12 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
-using EndPointsWebAPINetCore.Model;
 
-// For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
 namespace EndPointsWebAPINetCore.Controllers
 {
@@ -15,9 +9,9 @@ namespace EndPointsWebAPINetCore.Controllers
     [ApiController]
     public class CandidateController : ControllerBase
     {
-        private readonly ILogger<Candidate> _logger;
+        private readonly ILogger<CandidateController> _logger;
 
-        public CandidateController(ILogger<Candidate> logger)
+        public CandidateController(ILogger<CandidateController> logger)
         {
             _logger = logger;
         }
@@ -25,11 +19,9 @@ namespace EndPointsWebAPINetCore.Controllers
         /// Provides test information
         /// </summary>
         /// <returns>Jason</returns>
+       
         [HttpGet]
-        public Candidate Get()
-        {
-            return new Candidate() { name = "test", phone = "test" };
-        }
+        public IActionResult Get() => Ok(new { name = "test", phone = "test" });
 
     }
 }

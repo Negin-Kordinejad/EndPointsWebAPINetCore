@@ -1,8 +1,6 @@
 ﻿using ClientWebAPI.Contracts;
-using ClientWebAPI.Model;
 using Microsoft.AspNetCore.Mvc;
-using System;
-using System.Collections.Generic;
+using Microsoft.Extensions.Logging;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -13,10 +11,11 @@ namespace EndPointsWebAPINetCore.Controllers
     [ApiController]
     public class ListingsController : ControllerBase
     {
-        private IPassengerEndPoint _passengerEndPoint;
-
-        public ListingsController(IPassengerEndPoint passengerEndPoint)
+        private readonly IPassengerEndPoint _passengerEndPoint;
+        private readonly ILogger<ListingsController> _logger;
+        public ListingsController(ILogger<ListingsController> logger, IPassengerEndPoint passengerEndPoint)
         {
+            _logger = logger;
             _passengerEndPoint = passengerEndPoint;
         }
         /// <summary>
@@ -41,7 +40,7 @@ namespace EndPointsWebAPINetCore.Controllers
         /// <returns>Json</returns>
         /// <response code="200">Success with the result</response>
         /// <response code="404">If the result is not found</response>     
-     
+
         [HttpGet("{passNo}")]
         public async Task<IActionResult> GetReport(int passNo)
         {

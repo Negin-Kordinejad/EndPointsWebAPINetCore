@@ -1,9 +1,8 @@
-﻿using ClientWebAPI;
-using Microsoft.AspNetCore.Http;
+﻿using ClientWebAPI.Contracts;
+using ClientWebAPI.Model;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 
@@ -17,9 +16,11 @@ namespace EndPointsWebAPINetCore.Controllers
     public class LocationController : ControllerBase
     {
 
-        private IIpProcessor _ipProcessor;
-        public LocationController(IIpProcessor ipProcessor)
+        private readonly IIpProcessor _ipProcessor;
+        private readonly ILogger<LocationController> _logger;
+        public LocationController(ILogger<LocationController>  logger,IIpProcessor ipProcessor)
         {
+            _logger = logger;
             _ipProcessor = ipProcessor;
         }
 
