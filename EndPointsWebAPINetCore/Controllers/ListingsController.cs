@@ -1,6 +1,8 @@
 ﻿using ClientWebAPI.Contracts;
+using EndPointsWebAPINetCore.Dtos;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -43,7 +45,7 @@ namespace EndPointsWebAPINetCore.Controllers
         /// <response code="404">If the result is not found</response>     
 
         [HttpGet("{passNo}")]
-        public async Task<IActionResult> GetReport(int passNo)
+        public async Task<ActionResult<JournyDto>> GetReport(int passNo)
         {
             if (passNo == 0)
             {
@@ -61,9 +63,22 @@ namespace EndPointsWebAPINetCore.Controllers
                         .OrderByDescending(o => o.Total).ToList();
 
 
-                var Result = new { pList.from, pList.to, result = Tlist };
+              //  var Result = new { pList.from, pList.to, result = Tlist };
 
-                return Ok(Result);
+                JournyDto Result = new JournyDto()
+                {
+                    From = pList.from,
+                    To = pList.to,
+                    Result = Tlist.ConvertAll(x => new ResultDto
+                    {
+                        Name = x.Name,
+                       Total = x.Total
+                    })
+
+                };
+             
+
+                return Result;
             }
             else
             {
