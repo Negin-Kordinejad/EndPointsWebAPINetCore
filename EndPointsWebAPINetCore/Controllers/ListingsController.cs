@@ -1,4 +1,5 @@
-﻿using ClientWebAPI.Contracts;
+﻿using AutoMapper;
+using ClientWebAPI.Contracts;
 using EndPointsWebAPINetCore.Dtos;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
@@ -13,12 +14,15 @@ namespace EndPointsWebAPINetCore.Controllers
     [ApiController]
     public class ListingsController : ControllerBase
     {
-        private readonly IPassengerEndPoint _passengerEndPoint;
+        private readonly IJournyEndPoint _journyEndPoint;
         private readonly ILogger<ListingsController> _logger;
-        public ListingsController(ILogger<ListingsController> logger, IPassengerEndPoint passengerEndPoint)
+        private readonly IMapper _mapper;
+
+        public ListingsController(ILogger<ListingsController> logger, IMapper mapper, IJournyEndPoint journyEndPoint)
         {
             _logger = logger;
-            _passengerEndPoint = passengerEndPoint;
+            _mapper = mapper;
+            _journyEndPoint = journyEndPoint;
         }
         /// <summary>
         ///  Takes the number of passengers as a parameter, calculate the total price and return the results sorted by total price
@@ -44,7 +48,7 @@ namespace EndPointsWebAPINetCore.Controllers
         /// <response code="400">If the passNo is zero</response> 
         /// <response code="404">If the result is not found</response>     
 
-        [HttpGet("{passNo}")]
+        [HttpGet("{passNo:int}")]
         public async Task<ActionResult<JournyDto>> GetReport(int passNo)
         {
             if (passNo == 0)
@@ -52,39 +56,31 @@ namespace EndPointsWebAPINetCore.Controllers
                 return BadRequest("Please enter the corrext number");
             }
 
-            var pList = await _passengerEndPoint.GetPassengerList();
+            var jList = await _journyEndPoint.GetJournyList();
 
-            var List = pList.listings.GroupBy(l => l.vehicleType.maxPassengers).Where(g => g.Key == passNo).FirstOrDefault();
-
-            if (List != null)
-            {
-                var Tlist = List.Select(s =>
-                 new { Name = s.name, Total = s.pricePerPassenger * s.vehicleType.maxPassengers })
-                        .OrderByDescending(o => o.Total).ToList();
-
-
-              //  var Result = new { pList.from, pList.to, result = Tlist };
-
-                JournyDto Result = new JournyDto()
-                {
-                    From = pList.from,
-                    To = pList.to,
-                    Result = Tlist.ConvertAll(x => new ResultDto
-                    {
-                        Name = x.Name,
-                       Total = x.Total
-                    })
-
-                };
-             
-
-                return Result;
-            }
-            else
+            var List = jList.listings.GroupBy(l => l.vehicleType.maxPassengers).Where(g => g.Key == passNo).FirstOrDefault();
+            if (List == null)
             {
                 return NotFound();
-                // _logger.LogWarning
             }
+            var Tlist = List.Select(s =>
+             new { Name = s.name, Total = s.pricePerPassenger * s.vehicleType.maxPassengers })
+                    .OrderByDescending(o => o.Total).ToList();
+
+
+            //  var Result = new { pList.from, pList.to, result = Tlist };
+
+            JournyDto Result = new()
+            {
+                From = jList.from,
+                To = jList.to,
+                Result = Tlist.ConvertAll(x => new ListingDto
+                {
+                    Name = x.Name,
+                    Total = x.Total
+                })
+            };
+            return Result;
 
         }
 

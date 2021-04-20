@@ -1,5 +1,5 @@
 ﻿using ClientWebAPI.Contracts;
-using ClientWebAPI.Model;
+using ClientWebAPI.Models;
 using System;
 using System.Net.Http;
 using System.Text.RegularExpressions;

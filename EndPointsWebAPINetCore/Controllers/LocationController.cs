@@ -1,5 +1,5 @@
 ﻿using ClientWebAPI.Contracts;
-using ClientWebAPI.Model;
+using ClientWebAPI.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System;
@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 namespace EndPointsWebAPINetCore.Controllers
 {
 
-    [Produces("application/json")]
+
     [Route("Location")]
     [ApiController]
 
@@ -18,7 +18,7 @@ namespace EndPointsWebAPINetCore.Controllers
 
         private readonly IIpProcessor _ipProcessor;
         private readonly ILogger<LocationController> _logger;
-        public LocationController(ILogger<LocationController>  logger,IIpProcessor ipProcessor)
+        public LocationController(ILogger<LocationController> logger, IIpProcessor ipProcessor)
         {
             _logger = logger;
             _ipProcessor = ipProcessor;
@@ -31,8 +31,9 @@ namespace EndPointsWebAPINetCore.Controllers
         /// <response code="200">Success with the result</response>
         /// <response code="400">If the Ip address not correct</response>     
         /// <response code="404">If the result not found</response>     
+        [Produces("application/json")]
+        [HttpGet("{ipAddress}", Name = "GetIpLocation")]
 
-        [HttpGet("{ipAddress}")]
         public async Task<IActionResult> GetIpLocation(string ipAddress)
         {
             try
@@ -48,7 +49,6 @@ namespace EndPointsWebAPINetCore.Controllers
             catch (ArgumentException)
             {
                 return BadRequest($"Ip Address {ipAddress} is incorrect");
-               // throw new HttpResponsexeption()
             }
         }
     }

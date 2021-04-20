@@ -3,8 +3,8 @@ using System.Threading.Tasks;
 
 namespace ClientWebAPI.Contracts
 {
-    public interface IIpProcessor
+    public interface IJournyEndPoint
     {
-        Task<Location> IpLocator(string ipAddress);
+        Task<Journy> GetJournyList();
     }
 }

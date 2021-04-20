@@ -24,10 +24,11 @@ namespace EndPointsWebAPINetCore
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddScoped<IIpProcessor, IpProcessor>()
-                    .AddScoped<IPassengerEndPoint, PassengerEndPoint>()
+                    .AddScoped<IJournyEndPoint, JournyEndPoint>()
                     .AddSingleton<IAPIHelper, APIHelper>();
 
             services.AddControllers();
+            services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo
@@ -59,7 +60,8 @@ namespace EndPointsWebAPINetCore
         {
             if (env.IsDevelopment())
             {
-            //  app.UseExceptionHandler("/error-local-development");
+                // app.UseStaticFiles();
+                //  app.UseExceptionHandler("/error-local-development");
                 app.UseDeveloperExceptionPage();
                 app.UseSwagger();
                 app.UseSwaggerUI(c =>

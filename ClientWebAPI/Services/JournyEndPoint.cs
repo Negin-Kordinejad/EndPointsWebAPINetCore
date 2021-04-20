@@ -1,21 +1,21 @@
 ﻿using ClientWebAPI.Contracts;
-using ClientWebAPI.Model;
+using ClientWebAPI.Models;
 using System;
 using System.Net.Http;
 using System.Threading.Tasks;
 
 namespace ClientWebAPI.Services
 {
-    public class PassengerEndPoint : IPassengerEndPoint
+    public class JournyEndPoint : IJournyEndPoint
     {
         private IAPIHelper _apiHelper;
 
-        public PassengerEndPoint(IAPIHelper apiHelper)
+        public JournyEndPoint(IAPIHelper apiHelper)
         {
             _apiHelper = apiHelper;
 
         }
-        public async Task<Passengers> GetPassengerList()
+        public async Task<Journy> GetJournyList()
         {
             string url = "";
 
@@ -25,7 +25,7 @@ namespace ClientWebAPI.Services
             {
                 if (response.IsSuccessStatusCode)
                 {
-                    Passengers passengers = await response.Content.ReadAsAsync<Passengers>();
+                    Journy passengers = await response.Content.ReadAsAsync<Journy>();
 
                     return passengers;
                 }

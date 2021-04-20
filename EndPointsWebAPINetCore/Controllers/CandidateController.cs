@@ -5,7 +5,7 @@ using Microsoft.Extensions.Logging;
 namespace EndPointsWebAPINetCore.Controllers
 {
     [Route("candidate")]
-    [Produces("application/json")]
+  //  [Produces("application/json")]
     [ApiController]
     public class CandidateController : ControllerBase
     {

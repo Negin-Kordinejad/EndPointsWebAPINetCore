@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace ClientWebAPI.Model
+namespace ClientWebAPI.Models
 {
     public class Location
     {

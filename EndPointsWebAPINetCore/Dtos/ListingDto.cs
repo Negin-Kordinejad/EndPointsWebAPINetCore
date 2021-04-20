@@ -5,7 +5,10 @@ using System.Threading.Tasks;
 
 namespace EndPointsWebAPINetCore.Dtos
 {
-    public class ResultDto
+    /// <summary>
+    /// the result
+    /// </summary>
+    public class ListingDto
     {
         public string Name { get; set; }
         public float Total { get; set; }
