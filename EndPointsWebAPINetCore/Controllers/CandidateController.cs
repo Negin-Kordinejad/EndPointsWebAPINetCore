@@ -1,9 +1,11 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 
 
 namespace EndPointsWebAPINetCore.Controllers
 {
+    [Authorize]
     [Route("candidate")]
   //  [Produces("application/json")]
     [ApiController]

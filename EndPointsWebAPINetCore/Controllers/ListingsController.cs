@@ -12,6 +12,7 @@ namespace EndPointsWebAPINetCore.Controllers
     [Produces("application/json")]
     [Route("Listings")]
     [ApiController]
+    
     public class ListingsController : ControllerBase
     {
         private readonly IJournyEndPoint _journyEndPoint;
@@ -57,8 +58,8 @@ namespace EndPointsWebAPINetCore.Controllers
             }
 
             var jList = await _journyEndPoint.GetJournyList();
-
-            var List = jList.listings.GroupBy(l => l.vehicleType.maxPassengers).Where(g => g.Key == passNo).FirstOrDefault();
+            var List1 = jList.listings.GroupBy(l => l.vehicleType.name).Where(g => g.Key.ToUpper()== "Hatchback".ToUpper()).FirstOrDefault();
+            var List = jList.listings.GroupBy(l => l.vehicleType.maxPassengers).Where(g => g.Key >= passNo).FirstOrDefault();
             if (List == null)
             {
                 return NotFound();
