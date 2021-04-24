@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using ClientWebAPI.Contracts;
 using EndPointsWebAPINetCore.Dtos;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System.Collections.Generic;
@@ -12,7 +13,7 @@ namespace EndPointsWebAPINetCore.Controllers
     [Produces("application/json")]
     [Route("Listings")]
     [ApiController]
-    
+    [Authorize]
     public class ListingsController : ControllerBase
     {
         private readonly IJournyEndPoint _journyEndPoint;

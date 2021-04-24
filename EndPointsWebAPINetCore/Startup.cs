@@ -14,6 +14,7 @@ using System.IO;
 using System.Reflection;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 
 namespace EndPointsWebAPINetCore
 {
@@ -50,6 +51,7 @@ namespace EndPointsWebAPINetCore
                 options.DefaultChallengeScheme = "JwtBearer";
             }).AddJwtBearer("JwtBearer", jwtBrearerOptions =>
             {
+               
                 jwtBrearerOptions.TokenValidationParameters = new TokenValidationParameters
                 {
                     ValidateIssuerSigningKey = true,
@@ -58,6 +60,7 @@ namespace EndPointsWebAPINetCore
                     ValidateAudience = false,
                     ValidateLifetime = true,
                     ClockSkew = TimeSpan.FromMinutes(5)
+                 
                 };
             });
             services.AddSwaggerGen(c =>
@@ -92,7 +95,7 @@ namespace EndPointsWebAPINetCore
                     Scheme = "Bearer",
                     BearerFormat = "JWT",
                     In = ParameterLocation.Header,
-                    Description = "JWT Authorization header using the Bearer scheme. \r\n\r\n Enter 'Bearer' [space] and then your token in the text input below.\r\n\r\nExample: \"Bearer 1safsfsdfdfd\"",
+                    Description = "JWT Authorization header using the Bearer scheme. \r\n\r\n Enter 'Bearer' [space] and then your token in the text input below.\r\n\r\n<b>Example: Bearer 1safsfsdfdfb<b> ",
                 });
                 c.AddSecurityRequirement(new OpenApiSecurityRequirement
                     {
@@ -113,16 +116,6 @@ namespace EndPointsWebAPINetCore
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
-            app.UseHttpsRedirection();
-
-            app.UseRouting();
-            app.UseAuthentication();
-            app.UseAuthorization();
-
-            app.UseEndpoints(endpoints =>
-            {
-                endpoints.MapControllers();
-            });
             if (env.IsDevelopment())
             {
                 // app.UseStaticFiles();
@@ -138,7 +131,28 @@ namespace EndPointsWebAPINetCore
             {
                 app.UseExceptionHandler("/error");
             }
+            app.UseHttpsRedirection();
+            app.UseStaticFiles();
 
+            app.UseRouting();
+
+            app.UseAuthentication();
+
+            //app.Use(async (Context, next) =>
+            //{
+            //    if (Context.Request.Headers.Keys.Contains("Authorized"))
+            //    {
+            //        int t = 0;
+            //    }
+            //    else
+            //   //     await next();
+            //});
+           app.UseAuthorization();
+
+            app.UseEndpoints(endpoints =>
+            {
+                endpoints.MapControllers();
+            });
 
         }
     }

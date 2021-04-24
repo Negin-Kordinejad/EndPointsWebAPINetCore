@@ -1,5 +1,6 @@
 ﻿using ClientWebAPI.Contracts;
 using ClientWebAPI.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System;
@@ -12,7 +13,7 @@ namespace EndPointsWebAPINetCore.Controllers
 
     [Route("Location")]
     [ApiController]
-
+    [Authorize]
     public class LocationController : ControllerBase
     {
 
