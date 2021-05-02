@@ -8,10 +8,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace EndPointsWebAPINetCore.Controllers
+namespace EndPointsWebAPINetCore.Controllers.V1
 {
    [Route("Acount")]
     [ApiController]
+    [ApiVersion("1.0")]
     public class AcountController : ControllerBase
     {
         private readonly UserManager<IdentityUser> _userManager;

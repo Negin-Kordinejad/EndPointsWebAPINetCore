@@ -4,12 +4,14 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 
 
-namespace EndPointsWebAPINetCore.Controllers
+namespace EndPointsWebAPINetCore.Controllers.V1
 {
-    [Authorize]
+  //  [Authorize]
     [Route("candidate")]
   //  [Produces("application/json")]
     [ApiController]
+    [ApiVersion("1.0")]
+  
     public class CandidateController : ControllerBase
     {
         private readonly ILogger<CandidateController> _logger;
@@ -23,8 +25,9 @@ namespace EndPointsWebAPINetCore.Controllers
         /// </summary>
         /// <returns>Jason</returns>
        
-        [HttpGet]
+        [HttpGet,MapToApiVersion("1.0")]
         public IActionResult Get() => Ok(new { name = "test", phone = "test" });
 
+     
     }
 }

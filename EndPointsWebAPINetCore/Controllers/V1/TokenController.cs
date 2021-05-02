@@ -11,10 +11,11 @@ using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace EndPointsWebAPINetCore.Controllers
+namespace EndPointsWebAPINetCore.Controllers.V1
 {
     [Route("api/[controller]")]
     [ApiController]
+    [ApiVersion("1.0")]
     public class TokenController : ControllerBase
     {
         private readonly AppDbContext _contexr;

@@ -15,6 +15,12 @@ using System.Reflection;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Versioning;
+using Microsoft.Extensions.Logging;
+using AutoMapper;
+using ClientWebAPI.Models;
+using EndPointsWebAPINetCore.Dtos;
 
 namespace EndPointsWebAPINetCore
 {
@@ -26,9 +32,14 @@ namespace EndPointsWebAPINetCore
         }
 
         public IConfiguration Configuration { get; }
-
+       
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddAutoMapper(cfg =>
+            {
+                cfg.CreateMap<Journy, JournyDto>();
+                //   cfg.CreateMap<CartItemModel, CartItemDisplayModel>();
+            });
             services.AddScoped<IIpProcessor, IpProcessor>()
                     .AddScoped<IJournyEndPoint, JournyEndPoint>()
                     .AddSingleton<IAPIHelper, APIHelper>();
@@ -51,7 +62,7 @@ namespace EndPointsWebAPINetCore
                 options.DefaultChallengeScheme = "JwtBearer";
             }).AddJwtBearer("JwtBearer", jwtBrearerOptions =>
             {
-               
+
                 jwtBrearerOptions.TokenValidationParameters = new TokenValidationParameters
                 {
                     ValidateIssuerSigningKey = true,
@@ -60,9 +71,10 @@ namespace EndPointsWebAPINetCore
                     ValidateAudience = false,
                     ValidateLifetime = true,
                     ClockSkew = TimeSpan.FromMinutes(5)
-                 
+
                 };
             });
+
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo
@@ -83,6 +95,22 @@ namespace EndPointsWebAPINetCore
                         Url = new Uri("https://www.jayride.com/"),
                     }
                 });
+
+                c.SwaggerDoc("v2", new OpenApiInfo
+                {
+                    Title = "EndPointsWebAPI",
+                    Version = "v2",
+                    Description = "A Coding Challenge ASP.NET Core Web API version 2",
+                    TermsOfService = new Uri("https://example.com/terms"),
+                    Contact = new OpenApiContact
+                    {
+                        Name = "Negin Kordinejad",
+                        Email = string.Empty,
+                        Url = new Uri("https://www.linkedin.com/in/negin-kordinejad-995a5541/"),
+                    },
+                   
+                });
+
 
                 var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
                 var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
@@ -112,42 +140,66 @@ namespace EndPointsWebAPINetCore
                         }
                     });
             });
+            services.AddApiVersioning(options =>
+            {
+                options.AssumeDefaultVersionWhenUnspecified = true;
+                options.DefaultApiVersion = ApiVersion.Default;
+                options.ReportApiVersions = true;
+                options.ApiVersionReader = ApiVersionReader.Combine(
+                    new HeaderApiVersionReader("x-api-version"),
+                    new MediaTypeApiVersionReader("x-api-version")
+                    );
+            }
+                );
         }
 
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env,ILogger<Startup> logger)
         {
             if (env.IsDevelopment())
             {
-                // app.UseStaticFiles();
+                DeveloperExceptionPageOptions options = new DeveloperExceptionPageOptions
+                {
+                    SourceCodeLineCount = 10
+                };
+
                 //  app.UseExceptionHandler("/error-local-development");
-                app.UseDeveloperExceptionPage();
+                app.UseDeveloperExceptionPage(options);
                 app.UseSwagger();
                 app.UseSwaggerUI(c =>
                 {
                     c.SwaggerEndpoint("/swagger/v1/swagger.json", "EndPointsWebAPINetCore v1");
+                    c.SwaggerEndpoint("/swagger/v2/swagger.json", "EndPointsWebAPINetCore v2");
                 });
             }
-            else
+            else if(env.IsStaging() || env.IsEnvironment("UAT")|| env.IsProduction())
             {
-                app.UseExceptionHandler("/error");
+                app.UseExceptionHandler("/error"); //unhandled Errors
+             //  app.UseStatusCodePagesWithReExecute("/Error/{0}"); for Mvc for errorcode 
             }
             app.UseHttpsRedirection();
-            app.UseStaticFiles();
-
+            app.UseFileServer();
+       //     app.UseStaticFiles();  app.UseDefaultFiles
+     
             app.UseRouting();
 
             app.UseAuthentication();
-
             //app.Use(async (Context, next) =>
             //{
             //    if (Context.Request.Headers.Keys.Contains("Authorized"))
             //    {
-            //        int t = 0;
+            //        logger.LogInformation(Context.Request.Body.Length.ToString());
+            //        await next();
+            //        logger.LogInformation(Context.Response.Body.Length.ToString());
             //    }
-            //    else
-            //   //     await next();
             //});
-           app.UseAuthorization();
+            //app.Use(async (Context, next) =>
+            //{
+            //    if (Context.Request.Headers.Keys.Contains("Authorized"))
+            //    {
+            //         await next();
+            //    }
+            //});
+            app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
             {

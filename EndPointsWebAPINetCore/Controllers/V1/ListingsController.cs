@@ -2,18 +2,20 @@
 using ClientWebAPI.Contracts;
 using EndPointsWebAPINetCore.Dtos;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace EndPointsWebAPINetCore.Controllers
+namespace EndPointsWebAPINetCore.Controllers.V1
 {
     [Produces("application/json")]
     [Route("Listings")]
     [ApiController]
-    [Authorize]
+  //  [Authorize]
+    [ApiVersion("1.0")]
     public class ListingsController : ControllerBase
     {
         private readonly IJournyEndPoint _journyEndPoint;
@@ -59,8 +61,8 @@ namespace EndPointsWebAPINetCore.Controllers
             }
 
             var jList = await _journyEndPoint.GetJournyList();
-            var List1 = jList.listings.GroupBy(l => l.vehicleType.name).Where(g => g.Key.ToUpper()== "Hatchback".ToUpper()).FirstOrDefault();
-            var List = jList.listings.GroupBy(l => l.vehicleType.maxPassengers).Where(g => g.Key >= passNo).FirstOrDefault();
+        //    var List1 = jList.listings.GroupBy(l => l.vehicleType.name).Where(g => g.Key.ToUpper()== "Hatchback".ToUpper()).FirstOrDefault();
+            var List = jList.listings.GroupBy(l => l.vehicleType.maxPassengers).Where(g => g.Key <= passNo).FirstOrDefault();
             if (List == null)
             {
                 return NotFound();
@@ -71,7 +73,7 @@ namespace EndPointsWebAPINetCore.Controllers
 
 
             //  var Result = new { pList.from, pList.to, result = Tlist };
-
+       //     var Rmap = _mapper.Map<List<ListingDto>>(Tlist);
             JournyDto Result = new()
             {
                 From = jList.from,

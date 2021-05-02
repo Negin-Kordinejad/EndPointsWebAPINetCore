@@ -7,16 +7,14 @@ using System;
 using System.Threading.Tasks;
 
 
-namespace EndPointsWebAPINetCore.Controllers
+namespace EndPointsWebAPINetCore.Controllers.V1
 {
-
-
     [Route("Location")]
     [ApiController]
     [Authorize]
+    [ApiVersion("1.0")]
     public class LocationController : ControllerBase
     {
-
         private readonly IIpProcessor _ipProcessor;
         private readonly ILogger<LocationController> _logger;
         public LocationController(ILogger<LocationController> logger, IIpProcessor ipProcessor)
